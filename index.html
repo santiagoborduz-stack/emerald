@@ -88,6 +88,218 @@
             color: #6ee7b7;
             box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
         }
+
+        /* ===== EDITOR VISUAL ===== */
+        body.editing [data-edit],
+        body.editing [data-static],
+        body.editing .ed-note p {
+            outline: 1px dashed rgba(251, 191, 36, 0.55);
+            outline-offset: 3px;
+            border-radius: 6px;
+            cursor: text;
+            transition: background .15s ease;
+        }
+        body.editing [data-edit]:hover,
+        body.editing [data-static]:hover,
+        body.editing .ed-note p:hover {
+            background: rgba(251, 191, 36, 0.08);
+        }
+        body.editing .ed-img-slot {
+            outline: 2px dashed rgba(52, 211, 153, 0.7);
+            outline-offset: 2px;
+            cursor: grab;
+            touch-action: none;
+        }
+        body.editing .ed-img-slot:hover {
+            box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.18);
+        }
+        body.editing .ed-img-slot::after {
+            content: "Clic: foto · Arrastra: mover";
+            position: absolute;
+            left: 6px;
+            bottom: 6px;
+            z-index: 5;
+            font-size: 9px;
+            line-height: 1;
+            padding: 4px 6px;
+            border-radius: 6px;
+            background: rgba(2, 26, 18, 0.85);
+            color: #6ee7b7;
+            border: 1px solid rgba(52, 211, 153, 0.35);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        body.editing [data-img-slot].ed-img-small::after { display: none; }
+
+        #ed-fab {
+            position: fixed;
+            right: 16px;
+            bottom: 16px;
+            z-index: 9999;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 1px solid rgba(251, 191, 36, 0.55);
+            background: linear-gradient(135deg, #0f6346, #10b981);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 0 4px rgba(52, 211, 153, 0.12);
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+        #ed-fab:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6), 0 0 0 6px rgba(52, 211, 153, 0.18); }
+        #ed-fab svg { width: 22px; height: 22px; color: #fff; }
+        #ed-fab .ed-fab-dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #fbbf24;
+            border: 2px solid #021a12;
+        }
+        #ed-toolbar {
+            position: fixed;
+            right: 16px;
+            bottom: 82px;
+            z-index: 9998;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            align-items: stretch;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity .18s ease, transform .18s ease;
+        }
+        #ed-toolbar.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        #ed-toolbar button {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 9px;
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(52, 211, 153, 0.35);
+            background: rgba(2, 26, 18, 0.92);
+            color: #d1fae5;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .02em;
+            cursor: pointer;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+            transition: background .15s ease, border-color .15s ease, transform .15s ease;
+        }
+        #ed-toolbar button:hover {
+            background: rgba(15, 99, 70, 0.95);
+            border-color: rgba(52, 211, 153, 0.7);
+            transform: translateY(-1px);
+        }
+        #ed-toolbar button svg {
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+            color: #6ee7b7;
+        }
+        #ed-toolbar button.ed-primary {
+            background: linear-gradient(135deg, #0f6346, #10b981);
+            border-color: rgba(251, 191, 36, 0.5);
+            color: #fff;
+        }
+        #ed-toolbar button.ed-danger {
+            border-color: rgba(248, 113, 113, 0.35);
+            color: #fecaca;
+        }
+        #ed-toolbar button.ed-danger svg { color: #fca5a5; }
+        #ed-add-text { display: none; }
+        body.editing #ed-add-text { display: flex; }
+        body.editing #ed-toggle { background: rgba(251, 191, 36, 0.15); border-color: rgba(251, 191, 36, 0.65); color: #fde68a; }
+
+        #ed-toast {
+            position: fixed;
+            left: 50%;
+            bottom: 22px;
+            transform: translate(-50%, 20px);
+            z-index: 9999;
+            max-width: min(92vw, 560px);
+            padding: 12px 18px;
+            border-radius: 12px;
+            background: rgba(2, 26, 18, 0.96);
+            border: 1px solid rgba(52, 211, 153, 0.5);
+            color: #d1fae5;
+            font-size: 12.5px;
+            font-weight: 600;
+            line-height: 1.45;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s ease, transform .2s ease;
+            text-align: center;
+        }
+        #ed-toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+        #ed-toast.ed-error { border-color: rgba(248, 113, 113, 0.7); color: #fecaca; }
+
+        .ed-note {
+            border-color: rgba(251, 191, 36, 0.45) !important;
+            position: relative;
+        }
+        .ed-note p { min-height: 1.4em; }
+
+        #ed-add-rel {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(251, 191, 36, 0.45);
+            background: rgba(251, 191, 36, 0.1);
+            color: #fde68a;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        body.editing #ed-add-rel { display: inline-flex; }
+        .ed-del-rel {
+            display: none;
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            z-index: 6;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid rgba(248, 113, 113, 0.5);
+            background: rgba(127, 29, 29, 0.92);
+            color: #fecaca;
+            font-size: 14px;
+            line-height: 1;
+            cursor: pointer;
+        }
+        body.editing .ed-del-rel { display: flex; align-items: center; justify-content: center; }
+
+        body.editing #dept-mapeo .btn-actor,
+        body.editing #dept-mapeo .tab-dept { cursor: pointer; }
+
+        @media (max-width: 640px) {
+            #ed-fab { right: 10px; bottom: 10px; width: 50px; height: 50px; }
+            #ed-toolbar { right: 10px; bottom: 70px; gap: 6px; }
+            #ed-toolbar button { padding: 9px 11px; font-size: 11px; }
+            #ed-toast { bottom: 78px; }
+        }
     </style>
 </head>
 <body class="bg-emerald-950 text-slate-100 font-body min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-900 via-emerald-950 to-black selection:bg-emerald-500 selection:text-emerald-950">
@@ -470,6 +682,7 @@
         // DATOS EXTRAÍDOS Y CONSOLIDADOS DE LAS HOJAS DE EXCEL "MATRICES GRANDES"
         // =========================================================================
 
+        /* ===== DATA_START ===== */
         // 1. FECHAS (LÍNEA DE TIEMPO DE 136 MOMENTOS EXACTOS)
         const timelineData = [
             { id: 1, fecha: "15-03-1960", hecho: "Inicio de las primeras pugnas por la explotación libre en las minas de Muzo.", actor: "Guaqueros e intermediarios", lugar: "Muzo" },
@@ -662,6 +875,18 @@
             { nombre: "Daniel 'El Loco' Barrera", resumen: "Infiltró la economía esmeraldera mediante compra masiva de propiedades y lavado." },
             { nombre: "Pablo Rayo Montaño", resumen: "Socio internacional con redes de transporte marítimo conectado a comercializadores de gemas." }
         ];
+        /* ===== DATA_END ===== */
+
+        // Referencias globales para el editor visual
+        window.SITE_DATA = {
+            timelineData,
+            minasData,
+            hechosData,
+            actoresPrincipalesData,
+            clanesData,
+            esmeralderosData,
+            narcosData
+        };
 
         // =========================================================================
         // FUNCIONES DE NAVEGACIÓN Y RENDERIZADO
@@ -693,22 +918,30 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // Contenedor de imagen reutilizable (foto + posición ajustable)
+        function imgSlot(slot, foto, pos, cls) {
+            const style = foto ? `background-image:url('${foto}');background-size:cover;background-position:${pos || '50% 50%'};` : '';
+            return `<div class="ed-img-slot relative rounded-xl border border-emerald-500/20 overflow-hidden ${cls || 'h-40'}" data-img-slot="${slot}" style="${style}">
+                ${foto ? '' : `<div class="absolute inset-0 flex flex-col items-center justify-center text-emerald-400/60 pointer-events-none"><i data-lucide="image" class="w-8 h-8 mb-1"></i><span class="text-[11px]">Espacio para Fotografía</span></div>`}
+            </div>`;
+        }
+
         // Renderizar Línea de Tiempo
         function renderTimeline(data) {
             const container = document.getElementById('timeline-container');
             container.innerHTML = data.map(item => `
                 <div class="glass-card p-4 rounded-2xl border border-emerald-500/20 hover:border-emerald-400 transition flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <span class="px-3 py-1 rounded-xl bg-gold-500/20 text-gold-400 border border-gold-500/30 text-xs font-bold font-title whitespace-nowrap">
+                        <span class="px-3 py-1 rounded-xl bg-gold-500/20 text-gold-400 border border-gold-500/30 text-xs font-bold font-title whitespace-nowrap" data-edit="timeline:${item.id}:fecha">
                             ${item.fecha}
                         </span>
                         <div>
-                            <h4 class="text-sm font-semibold text-white">${item.hecho}</h4>
-                            <span class="text-[11px] text-emerald-400">Actor: ${item.actor}</span>
+                            <h4 class="text-sm font-semibold text-white" data-edit="timeline:${item.id}:hecho">${item.hecho}</h4>
+                            <span class="text-[11px] text-emerald-400">Actor: <span data-edit="timeline:${item.id}:actor">${item.actor}</span></span>
                         </div>
                     </div>
                     <span class="text-xs px-2.5 py-1 rounded-lg bg-emerald-900/60 border border-emerald-500/20 text-emerald-300 self-start md:self-auto">
-                        📍 ${item.lugar}
+                        📍 <span data-edit="timeline:${item.id}:lugar">${item.lugar}</span>
                     </span>
                 </div>
             `).join('');
@@ -717,30 +950,32 @@
         // Renderizar Minas
         function renderMinas() {
             const container = document.getElementById('minas-container');
-            container.innerHTML = minasData.map(m => `
+            container.innerHTML = minasData.map((m, i) => `
                 <div class="glass-card p-5 rounded-2xl border border-emerald-500/20 space-y-3">
-                    <div class="flex justify-between items-start">
-                        <h3 class="font-title text-lg font-bold text-gold-400">${m.nombre}</h3>
-                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-900 text-emerald-300 border border-emerald-500/30">${m.estatus}</span>
+                    <div class="flex justify-between items-start gap-2">
+                        <h3 class="font-title text-lg font-bold text-gold-400" data-edit="minas:${i}:nombre">${m.nombre}</h3>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-900 text-emerald-300 border border-emerald-500/30" data-edit="minas:${i}:estatus">${m.estatus}</span>
                     </div>
-                    <p class="text-xs text-slate-300 leading-relaxed">${m.descripcion}</p>
-                    <div class="text-[11px] text-emerald-400 font-medium">📍 ${m.ubicacion}</div>
+                    <p class="text-xs text-slate-300 leading-relaxed" data-edit="minas:${i}:descripcion">${m.descripcion}</p>
+                    <div class="text-[11px] text-emerald-400 font-medium">📍 <span data-edit="minas:${i}:ubicacion">${m.ubicacion}</span></div>
                 </div>
             `).join('');
+            if (window.lucide) lucide.createIcons();
         }
 
         // Renderizar Hechos Violentos
         function renderHechos() {
             const container = document.getElementById('hechos-container');
-            container.innerHTML = hechosData.map(h => `
+            container.innerHTML = hechosData.map((h, i) => `
                 <div class="glass-card p-5 rounded-2xl border border-red-500/20 space-y-2">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-title text-base font-bold text-red-300">${h.titulo}</h3>
-                        <span class="text-xs text-gold-400 font-semibold">${h.fecha}</span>
+                    <div class="flex justify-between items-center gap-2">
+                        <h3 class="font-title text-base font-bold text-red-300" data-edit="hechos:${i}:titulo">${h.titulo}</h3>
+                        <span class="text-xs text-gold-400 font-semibold" data-edit="hechos:${i}:fecha">${h.fecha}</span>
                     </div>
-                    <p class="text-xs text-slate-300 leading-relaxed">${h.descripcion}</p>
+                    <p class="text-xs text-slate-300 leading-relaxed" data-edit="hechos:${i}:descripcion">${h.descripcion}</p>
                 </div>
             `).join('');
+            if (window.lucide) lucide.createIcons();
         }
 
         // Renderizar Mapeo de Actores
@@ -772,14 +1007,23 @@
                 selBtn.classList.add('bg-emerald-500', 'text-emerald-950', 'font-bold');
             }
 
+            const mainPhoto = actor.foto
+                ? `background-image:url('${actor.foto}');background-size:cover;background-position:${actor.fotoPos || '50% 50%'};`
+                : '';
+
             // Renderizar panel
             const panel = document.getElementById('actor-detail-panel');
             panel.innerHTML = `
                 <div class="space-y-6">
                     <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-emerald-500/20 pb-4">
-                        <div>
-                            <span class="text-xs text-gold-400 uppercase font-bold tracking-wider">${actor.rol}</span>
-                            <h3 class="font-title text-2xl font-bold text-white">${actor.nombre}</h3>
+                        <div class="flex items-center gap-4">
+                            <div class="ed-img-slot ed-img-small relative w-20 h-20 rounded-full border-2 border-emerald-400/40 overflow-hidden shrink-0" data-img-slot="actor:${key}:main" style="${mainPhoto}">
+                                ${actor.foto ? '' : `<div class="absolute inset-0 flex items-center justify-center bg-emerald-900"><i data-lucide="user" class="w-8 h-8 text-emerald-300"></i></div>`}
+                            </div>
+                            <div>
+                                <span class="text-xs text-gold-400 uppercase font-bold tracking-wider" data-edit="actor:${key}:rol">${actor.rol}</span>
+                                <h3 class="font-title text-2xl font-bold text-white" data-edit="actor:${key}:nombre">${actor.nombre}</h3>
+                            </div>
                         </div>
                         <span class="px-3 py-1 rounded-full bg-emerald-900/80 border border-emerald-400/30 text-xs text-emerald-300">
                             Matriz de Red Individual
@@ -789,43 +1033,53 @@
                     <!-- Resumen Biográfico Pequeño -->
                     <div class="bg-emerald-950/60 p-4 rounded-2xl border border-emerald-500/20 text-xs text-slate-200 leading-relaxed">
                         <strong class="text-emerald-400 block mb-1">Resumen Biográfico Documental:</strong>
-                        ${actor.resumen}
+                        <span data-edit="actor:${key}:resumen">${actor.resumen}</span>
                     </div>
 
-                    <!-- Mapeo Gráfico de Conexiones Personales con Fotos/Contenedores -->
+                    <!-- Mapa gráfico de la red individual -->
                     <div>
-                        <h4 class="font-title text-sm font-bold text-emerald-300 mb-4 flex items-center gap-2">
-                            <i data-lucide="git-merge" class="w-4 h-4 text-gold-400"></i> Red Mapeada de Relaciones y Conexiones
-                        </h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            ${actor.relaciones.map(r => `
-                                <div class="glass-card p-4 rounded-2xl border border-emerald-500/30 space-y-3 text-center">
-                                    <div class="w-16 h-16 mx-auto rounded-full bg-emerald-900 border-2 border-emerald-400/40 flex items-center justify-center overflow-hidden">
-                                        <i data-lucide="user" class="w-8 h-8 text-emerald-300"></i>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                            <h4 class="font-title text-sm font-bold text-emerald-300 flex items-center gap-2">
+                                <i data-lucide="git-merge" class="w-4 h-4 text-gold-400"></i> Red Mapeada de Relaciones y Conexiones
+                            </h4>
+                            <button id="ed-add-rel" type="button" title="Añadir una conexión al actor seleccionado">＋ Añadir conexión</button>
+                        </div>
+                        <div id="actor-graph" class="w-full overflow-hidden rounded-2xl border border-emerald-500/20 bg-emerald-950/40"></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                            ${actor.relaciones.map((r, i) => {
+                                const relPhoto = r.foto
+                                    ? `background-image:url('${r.foto}');background-size:cover;background-position:${r.fotoPos || '50% 50%'};`
+                                    : '';
+                                return `
+                                <div class="glass-card relative p-4 rounded-2xl border border-emerald-500/30 space-y-3 text-center">
+                                    <button class="ed-del-rel" type="button" data-del-rel="${i}" title="Eliminar esta conexión">×</button>
+                                    <div class="ed-img-slot ed-img-small relative w-16 h-16 mx-auto rounded-full bg-emerald-900 border-2 border-emerald-400/40 overflow-hidden" data-img-slot="actor:${key}:rel:${i}" style="${relPhoto}">
+                                        ${r.foto ? '' : `<div class="absolute inset-0 flex items-center justify-center"><i data-lucide="user" class="w-8 h-8 text-emerald-300"></i></div>`}
                                     </div>
                                     <div>
-                                        <span class="text-[10px] text-gold-400 font-bold uppercase block">${r.tipo}</span>
-                                        <h5 class="font-title text-xs font-bold text-white">${r.nombre}</h5>
+                                        <span class="text-[10px] text-gold-400 font-bold uppercase block" data-edit="actor:${key}:rel:${i}:tipo">${r.tipo}</span>
+                                        <h5 class="font-title text-xs font-bold text-white" data-edit="actor:${key}:rel:${i}:nombre">${r.nombre}</h5>
                                     </div>
-                                </div>
-                            `).join('')}
+                                </div>`;
+                            }).join('')}
                         </div>
                     </div>
                 </div>
             `;
             lucide.createIcons();
+            if (window.drawActorGraph) window.drawActorGraph(key);
         }
 
         // Renderizar Clanes
         function renderClanes() {
             const tbody = document.getElementById('clanes-table-body');
-            tbody.innerHTML = clanesData.map(c => `
+            tbody.innerHTML = clanesData.map((c, i) => `
                 <tr class="hover:bg-emerald-900/30 transition">
-                    <td class="p-4 font-bold text-emerald-300 font-title">${c.nombre}</td>
-                    <td class="p-4">${c.lideres}</td>
-                    <td class="p-4 text-gold-400 font-semibold">${c.zona}</td>
-                    <td class="p-4 text-slate-300 max-w-xs leading-relaxed">${c.resumen}</td>
-                    <td class="p-4"><span class="px-2 py-1 rounded bg-emerald-900 border border-emerald-500/30 text-[10px] text-emerald-200">${c.estatus}</span></td>
+                    <td class="p-4 font-bold text-emerald-300 font-title" data-edit="clanes:${i}:nombre">${c.nombre}</td>
+                    <td class="p-4" data-edit="clanes:${i}:lideres">${c.lideres}</td>
+                    <td class="p-4 text-gold-400 font-semibold" data-edit="clanes:${i}:zona">${c.zona}</td>
+                    <td class="p-4 text-slate-300 max-w-xs leading-relaxed" data-edit="clanes:${i}:resumen">${c.resumen}</td>
+                    <td class="p-4"><span class="px-2 py-1 rounded bg-emerald-900 border border-emerald-500/30 text-[10px] text-emerald-200" data-edit="clanes:${i}:estatus">${c.estatus}</span></td>
                 </tr>
             `).join('');
         }
@@ -833,35 +1087,31 @@
         // Renderizar Esmeralderos
         function renderEsmeralderos() {
             const container = document.getElementById('esmeralderos-grid');
-            container.innerHTML = esmeralderosData.map(e => `
+            container.innerHTML = esmeralderosData.map((e, i) => `
                 <div class="glass-card p-5 rounded-2xl border border-emerald-500/30 space-y-4">
-                    <div class="h-48 rounded-xl bg-emerald-900/60 border border-emerald-500/20 flex flex-col items-center justify-center text-emerald-400/60 relative overflow-hidden group">
-                        <i data-lucide="image" class="w-10 h-10 mb-2"></i>
-                        <span class="text-[11px]">Espacio para Fotografía</span>
-                    </div>
+                    ${imgSlot('esmeralderos:' + i, e.foto, e.fotoPos, 'h-48')}
                     <div>
-                        <h3 class="font-title text-lg font-bold text-emerald-200">${e.nombre}</h3>
-                        <p class="text-xs text-slate-300 leading-relaxed mt-1">${e.resumen}</p>
+                        <h3 class="font-title text-lg font-bold text-emerald-200" data-edit="esmeralderos:${i}:nombre">${e.nombre}</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed mt-1" data-edit="esmeralderos:${i}:resumen">${e.resumen}</p>
                     </div>
                 </div>
             `).join('');
+            if (window.lucide) lucide.createIcons();
         }
 
         // Renderizar Narcos
         function renderNarcos() {
             const container = document.getElementById('narcos-grid');
-            container.innerHTML = narcosData.map(n => `
+            container.innerHTML = narcosData.map((n, i) => `
                 <div class="glass-card p-5 rounded-2xl border border-red-500/20 space-y-4">
-                    <div class="h-48 rounded-xl bg-red-950/40 border border-red-500/20 flex flex-col items-center justify-center text-red-400/60 relative overflow-hidden group">
-                        <i data-lucide="user-x" class="w-10 h-10 mb-2"></i>
-                        <span class="text-[11px]">Espacio para Fotografía</span>
-                    </div>
+                    ${imgSlot('narcos:' + i, n.foto, n.fotoPos, 'h-48')}
                     <div>
-                        <h3 class="font-title text-lg font-bold text-red-300">${n.nombre}</h3>
-                        <p class="text-xs text-slate-300 leading-relaxed mt-1">${n.resumen}</p>
+                        <h3 class="font-title text-lg font-bold text-red-300" data-edit="narcos:${i}:nombre">${n.nombre}</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed mt-1" data-edit="narcos:${i}:resumen">${n.resumen}</p>
                     </div>
                 </div>
             `).join('');
+            if (window.lucide) lucide.createIcons();
         }
 
         // Inicializar
@@ -892,6 +1142,719 @@
                 document.getElementById('mobile-menu').classList.toggle('hidden');
             });
         });
+    </script>
+
+    <!-- ===== BARRA DEL EDITOR VISUAL ===== -->
+    <button id="ed-fab" type="button" title="Herramientas de edición" aria-label="Abrir herramientas de edición">
+        <i data-lucide="pencil"></i><span class="ed-fab-dot"></span>
+    </button>
+    <div id="ed-toolbar">
+        <button id="ed-toggle" type="button" title="Activar o desactivar el modo edición">
+            <i data-lucide="pencil"></i><span>Editar</span>
+        </button>
+        <button id="ed-add-text" type="button" title="Añadir un bloque de texto al departamento actual">
+            <i data-lucide="plus"></i><span>Añadir texto</span>
+        </button>
+        <button id="ed-save" type="button" title="Guardar los cambios en este navegador">
+            <i data-lucide="save"></i><span>Guardar</span>
+        </button>
+        <button id="ed-export" type="button" title="Descargar el HTML con los cambios para publicarlo">
+            <i data-lucide="download"></i><span>Exportar HTML</span>
+        </button>
+        <button id="ed-reset" type="button" class="ed-danger" title="Borrar los cambios guardados en este navegador">
+            <i data-lucide="rotate-ccw"></i><span>Restablecer</span>
+        </button>
+    </div>
+    <div id="ed-toast" role="status" aria-live="polite"></div>
+    <input id="ed-file" type="file" accept="image/*" hidden>
+
+    <script>
+    (function () {
+        'use strict';
+
+        const STORAGE_KEY = 'guerras-esmeralderas-site-editor-v1';
+        const $ = (sel, root) => (root || document).querySelector(sel);
+        const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+        let state = {};
+        try { state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; } catch (e) { state = {}; }
+        state.static = state.static || {};
+        state.notes = Array.isArray(state.notes) ? state.notes : [];
+
+        let editMode = false;
+        let pendingSlot = null;
+        let drag = null;
+        let toastTimer = null;
+
+        // ---------------------------------------------------------------------
+        // Utilidades
+        // ---------------------------------------------------------------------
+        function toast(msg, isError) {
+            const el = $('#ed-toast');
+            if (!el) return;
+            el.textContent = msg;
+            el.classList.toggle('ed-error', !!isError);
+            el.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.remove('show'), 4200);
+        }
+
+        function persist(show) {
+            const D = window.SITE_DATA;
+            if (!D) return false;
+            state.timeline = D.timelineData;
+            state.minas = D.minasData;
+            state.hechos = D.hechosData;
+            state.clanes = D.clanesData;
+            state.esmeralderos = D.esmeralderosData;
+            state.narcos = D.narcosData;
+            state.actores = D.actoresPrincipalesData;
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                if (show) toast('Cambios guardados en este navegador. Para publicarlos, usa “Exportar HTML”.');
+                return true;
+            } catch (e) {
+                toast('No se pudo guardar: el navegador se quedó sin espacio. Usa fotos más livianas.', true);
+                return false;
+            }
+        }
+
+        function currentActorKey() {
+            const active = $$('.btn-actor').find(b => b.classList.contains('bg-emerald-500'));
+            return active ? active.id.replace('btn-actor-', '') : null;
+        }
+
+        function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+
+        function parsePos(pos) {
+            const m = String(pos || '50% 50%').match(/([\d.]+)%\s+([\d.]+)%/);
+            return m ? [parseFloat(m[1]), parseFloat(m[2])] : [50, 50];
+        }
+
+        // ---------------------------------------------------------------------
+        // Aplicar cambios guardados antes del primer renderizado
+        // ---------------------------------------------------------------------
+        function applySavedData() {
+            const D = window.SITE_DATA;
+            if (!D) return;
+            const arrays = {
+                timeline: 'timelineData',
+                minas: 'minasData',
+                hechos: 'hechosData',
+                clanes: 'clanesData',
+                esmeralderos: 'esmeralderosData',
+                narcos: 'narcosData'
+            };
+            Object.keys(arrays).forEach(k => {
+                const saved = state[k];
+                if (Array.isArray(saved) && saved.length) {
+                    D[arrays[k]].length = 0;
+                    saved.forEach(item => D[arrays[k]].push(item));
+                }
+            });
+            if (state.actores && typeof state.actores === 'object') {
+                Object.keys(D.actoresPrincipalesData).forEach(k => {
+                    const saved = state.actores[k];
+                    const actor = D.actoresPrincipalesData[k];
+                    if (!saved || !actor) return;
+                    ['nombre', 'rol', 'resumen', 'foto', 'fotoPos'].forEach(f => {
+                        if (saved[f] !== undefined) actor[f] = saved[f];
+                    });
+                    if (Array.isArray(saved.relaciones)) actor.relaciones = saved.relaciones;
+                });
+            }
+        }
+        applySavedData();
+
+        // ---------------------------------------------------------------------
+        // Textos editables
+        // ---------------------------------------------------------------------
+        function registerStatic() {
+            const sec = document.getElementById('dept-inicio');
+            if (!sec) return;
+            const skip = ['#timeline-container', '#minas-container', '#hechos-container'];
+            let n = 0;
+            $$('h1,h2,h3,h4,h5,p,blockquote,li,td,th', sec).forEach(el => {
+                if (el.closest('[data-edit]') || el.closest('[data-img-slot]') || el.closest('button') || el.closest('a') || el.closest('.ed-note')) return;
+                if (skip.some(s => el.closest(s))) return;
+                if (!el.hasAttribute('data-static')) el.setAttribute('data-static', 'static:inicio:' + el.tagName.toLowerCase() + ':' + n);
+                n++;
+            });
+        }
+
+        function applyStaticEdits() {
+            $$('[data-static]').forEach(el => {
+                const key = el.getAttribute('data-static');
+                if (Object.prototype.hasOwnProperty.call(state.static, key)) {
+                    el.innerHTML = state.static[key];
+                }
+            });
+        }
+
+        function setEditable(on) {
+            $$('[data-edit],[data-static]').forEach(el => {
+                if (on) {
+                    el.setAttribute('contenteditable', 'true');
+                    el.setAttribute('spellcheck', 'false');
+                } else {
+                    el.removeAttribute('contenteditable');
+                }
+            });
+            $$('.ed-note p').forEach(p => {
+                if (on) {
+                    p.setAttribute('contenteditable', 'true');
+                    p.setAttribute('spellcheck', 'false');
+                } else {
+                    p.removeAttribute('contenteditable');
+                }
+            });
+        }
+
+        function saveElement(el, silent) {
+            if (!el) return;
+            if (el.hasAttribute('data-edit')) {
+                const path = el.getAttribute('data-edit');
+                const parts = path.split(':');
+                const value = el.innerText.replace(/\s+/g, ' ').trim();
+                const D = window.SITE_DATA;
+                const kind = parts[0];
+
+                if (kind === 'timeline') {
+                    const item = D.timelineData.find(x => String(x.id) === parts[1]);
+                    if (item) item[parts[2]] = value;
+                } else if (kind === 'minas') {
+                    const item = D.minasData[+parts[1]];
+                    if (item) item[parts[2]] = value;
+                } else if (kind === 'hechos') {
+                    const item = D.hechosData[+parts[1]];
+                    if (item) item[parts[2]] = value;
+                } else if (kind === 'clanes') {
+                    const item = D.clanesData[+parts[1]];
+                    if (item) item[parts[2]] = value;
+                } else if (kind === 'esmeralderos') {
+                    const item = D.esmeralderosData[+parts[1]];
+                    if (item) item[parts[2]] = value;
+                } else if (kind === 'narcos') {
+                    const item = D.narcosData[+parts[1]];
+                    if (item) item[parts[2]] = value;
+                } else if (kind === 'actor') {
+                    const actor = D.actoresPrincipalesData[parts[1]];
+                    if (!actor) return;
+                    if (parts[2] === 'rel') {
+                        const rel = actor.relaciones[+parts[3]];
+                        if (rel) rel[parts[4]] = value;
+                    } else {
+                        actor[parts[2]] = value;
+                    }
+                    if (!silent) {
+                        if (parts[2] === 'nombre') {
+                            const btn = document.getElementById('btn-actor-' + parts[1]);
+                            if (btn) btn.textContent = value;
+                        }
+                        if (parts[1] === currentActorKey() && window.drawActorGraph) {
+                            window.drawActorGraph(parts[1]);
+                        }
+                    }
+                }
+                if (!silent) persist(false);
+            } else if (el.hasAttribute('data-static')) {
+                state.static[el.getAttribute('data-static')] = el.innerHTML;
+                if (!silent) persist(false);
+            }
+        }
+
+        function saveNote(p) {
+            const note = p.closest('[data-note-id]');
+            if (!note) return;
+            const id = note.getAttribute('data-note-id');
+            const entry = state.notes.find(n => n.id === id);
+            if (entry) {
+                entry.html = note.innerHTML;
+                entry.className = note.className;
+            }
+        }
+
+        function saveAllEditable() {
+            $$('[data-edit],[data-static]').forEach(el => {
+                if (!el.getClientRects().length) return;
+                saveElement(el, true);
+            });
+            $$('.ed-note p').forEach(p => {
+                if (p.getClientRects().length) saveNote(p);
+            });
+            persist(false);
+        }
+
+        // ---------------------------------------------------------------------
+        // Imágenes: subir, ajustar y mover el encuadre
+        // ---------------------------------------------------------------------
+        function getSlotData(slot) {
+            const D = window.SITE_DATA;
+            if (!D || !slot) return null;
+            const parts = String(slot).split(':');
+            const kind = parts[0];
+            if (kind === 'esmeralderos') return D.esmeralderosData[+parts[1]] || null;
+            if (kind === 'narcos') return D.narcosData[+parts[1]] || null;
+            if (kind === 'minas') return D.minasData[+parts[1]] || null;
+            if (kind === 'hechos') return D.hechosData[+parts[1]] || null;
+            if (kind === 'actor') {
+                const actor = D.actoresPrincipalesData[parts[1]];
+                if (!actor) return null;
+                if (parts[2] === 'main') return actor;
+                if (parts[2] === 'rel') return actor.relaciones[+parts[3]] || null;
+            }
+            return null;
+        }
+
+        function applySlotVisual(slot, obj) {
+            $$('[data-img-slot]').filter(el => el.dataset.imgSlot === slot).forEach(el => {
+                if (obj.foto) {
+                    el.innerHTML = '';
+                    el.style.backgroundImage = "url('" + obj.foto + "')";
+                    el.style.backgroundSize = 'cover';
+                    el.style.backgroundPosition = obj.fotoPos || '50% 50%';
+                }
+            });
+        }
+
+        function openPicker(slot) {
+            pendingSlot = slot;
+            const input = $('#ed-file');
+            if (!input) return;
+            input.value = '';
+            input.click();
+        }
+
+        function resizeImage(file, maxSide, quality) {
+            return new Promise((resolve, reject) => {
+                if (!file.type || !file.type.startsWith('image/')) {
+                    reject(new Error('El archivo no es una imagen.'));
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const img = new Image();
+                    img.onload = () => {
+                        let w = img.width;
+                        let h = img.height;
+                        const scale = Math.min(1, maxSide / Math.max(w, h));
+                        w = Math.round(w * scale);
+                        h = Math.round(h * scale);
+                        const canvas = document.createElement('canvas');
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        const isPng = /png/i.test(file.type);
+                        resolve(canvas.toDataURL(isPng ? 'image/png' : 'image/jpeg', quality));
+                    };
+                    img.onerror = () => reject(new Error('No se pudo leer la imagen.'));
+                    img.src = reader.result;
+                };
+                reader.onerror = () => reject(new Error('No se pudo abrir el archivo.'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ---------------------------------------------------------------------
+        // Red individual gráfica (SVG)
+        // ---------------------------------------------------------------------
+        function colorFor(tipo) {
+            const t = String(tipo || '').toLowerCase();
+            if (/enemig|conflicto|mortal|ataque/.test(t)) return '#f87171';
+            if (/rival|tensi|disputa/.test(t)) return '#fbbf24';
+            if (/mediador|iglesia|mediaci/.test(t)) return '#60a5fa';
+            return '#34d399';
+        }
+
+        function initials(name) {
+            return String(name || '')
+                .replace(/\(.*?\)/g, '')
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map(w => w.charAt(0))
+                .join('')
+                .toUpperCase();
+        }
+
+        function drawActorGraph(key) {
+            const container = document.getElementById('actor-graph');
+            const D = window.SITE_DATA;
+            if (!container || !D) return;
+            const actor = D.actoresPrincipalesData[key];
+            if (!actor) return;
+            const rels = actor.relaciones || [];
+            if (!rels.length) {
+                container.innerHTML = '<div style="padding:24px;text-align:center;font-size:12px;color:#a7f3d0">Sin relaciones registradas para este actor.</div>';
+                return;
+            }
+
+            const W = 860;
+            const H = 440;
+            const cx = W / 2;
+            const cy = H / 2 + 4;
+            const R = Math.min(155, 110 + rels.length * 10);
+            const esc = s => String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+
+            const nodes = rels.map((r, i) => {
+                const angle = -Math.PI / 2 + (i * 2 * Math.PI / rels.length);
+                return {
+                    r, i,
+                    x: cx + Math.cos(angle) * R,
+                    y: cy + Math.sin(angle) * R,
+                    color: colorFor(r.tipo)
+                };
+            });
+
+            const defs = nodes.map(n => `<clipPath id="clipNode${n.i}"><circle cx="${n.x}" cy="${n.y}" r="28"/></clipPath>`).join('');
+            const centerFoto = actor.foto
+                ? `<image href="${actor.foto}" x="${cx - 46}" y="${cy - 46}" width="92" height="92" preserveAspectRatio="xMidYMid slice" clip-path="url(#clipCenter)"/>`
+                : `<text x="${cx}" y="${cy + 8}" text-anchor="middle" font-size="26" font-weight="700" fill="#6ee7b7" font-family="Cinzel, serif">${esc(initials(actor.nombre))}</text>`;
+
+            const nodeMarkup = nodes.map(n => {
+                const raw = String(n.r.nombre || '');
+                const label = raw.length > 28 ? raw.slice(0, 26) + '…' : raw;
+                const img = n.r.foto
+                    ? `<image href="${n.r.foto}" x="${n.x - 28}" y="${n.y - 28}" width="56" height="56" preserveAspectRatio="xMidYMid slice" clip-path="url(#clipNode${n.i})"/>`
+                    : `<text x="${n.x}" y="${n.y + 5}" text-anchor="middle" font-size="15" font-weight="700" fill="#d1fae5" font-family="Plus Jakarta Sans, sans-serif">${esc(initials(n.r.nombre))}</text>`;
+                const dashed = /enemig|conflicto|mortal|ataque/.test(String(n.r.tipo || '').toLowerCase()) ? ' stroke-dasharray="7 5"' : '';
+                return `
+                    <g class="ed-graph-node" data-name="${esc(raw)}" style="cursor:pointer">
+                        <line x1="${cx}" y1="${cy}" x2="${n.x}" y2="${n.y}" stroke="${n.color}" stroke-width="2.5" stroke-opacity="0.8"${dashed}/>
+                        <circle cx="${n.x}" cy="${n.y}" r="32" fill="#062c1e" stroke="${n.color}" stroke-width="2.5"/>
+                        ${img}
+                        <text x="${n.x}" y="${n.y + 52}" text-anchor="middle" font-size="11" font-weight="700" fill="#e2e8f0" font-family="Plus Jakarta Sans, sans-serif">${esc(label)}</text>
+                        <text x="${n.x}" y="${n.y + 66}" text-anchor="middle" font-size="8.5" font-weight="700" fill="${n.color}" font-family="Plus Jakarta Sans, sans-serif" letter-spacing="0.4">${esc(String(n.r.tipo || '').toUpperCase())}</text>
+                    </g>`;
+            }).join('');
+
+            container.innerHTML = `
+                <svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;min-height:300px" role="img" aria-label="Red de conexiones de ${esc(actor.nombre)}">
+                    <defs>
+                        <clipPath id="clipCenter"><circle cx="${cx}" cy="${cy}" r="46"/></clipPath>
+                        ${defs}
+                    </defs>
+                    <circle cx="${cx}" cy="${cy}" r="58" fill="#021a12" stroke="#fbbf24" stroke-width="3"/>
+                    ${centerFoto}
+                    <text x="${cx}" y="${cy + 82}" text-anchor="middle" font-size="13" font-weight="700" fill="#fbbf24" font-family="Cinzel, serif">${esc(actor.nombre)}</text>
+                    ${nodeMarkup}
+                </svg>
+                <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;padding:8px 12px 16px;font-size:10px;font-weight:700;color:#a7f3d0;font-family:'Plus Jakarta Sans',sans-serif">
+                    <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#34d399;margin-right:5px"></span>Aliado / socio</span>
+                    <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#f87171;margin-right:5px"></span>Enemigo / conflicto</span>
+                    <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#fbbf24;margin-right:5px"></span>Rivalidad</span>
+                    <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#60a5fa;margin-right:5px"></span>Mediación</span>
+                </div>
+            `;
+
+            container.querySelectorAll('.ed-graph-node').forEach(g => {
+                g.addEventListener('click', () => {
+                    const name = String(g.getAttribute('data-name') || '').toLowerCase();
+                    const found = Object.keys(D.actoresPrincipalesData).find(k => {
+                        const n = String(D.actoresPrincipalesData[k].nombre || '').toLowerCase();
+                        return name && (name.includes(n) || n.includes(name.split(' (')[0]));
+                    });
+                    if (found && typeof window.selectActor === 'function') window.selectActor(found);
+                });
+            });
+        }
+        window.drawActorGraph = drawActorGraph;
+
+        // ---------------------------------------------------------------------
+        // Notas de texto
+        // ---------------------------------------------------------------------
+        function addNote(dept, id, html, className) {
+            const sec = document.getElementById('dept-' + dept);
+            if (!sec) return null;
+            if (id && sec.querySelector('[data-note-id="' + id + '"]')) return null;
+            const note = document.createElement('div');
+            note.className = className || 'glass-card p-5 rounded-2xl border border-gold-400/30 my-4 ed-note';
+            note.setAttribute('data-note-id', id || ('note-' + Date.now()));
+            note.innerHTML = html || '<p class="text-sm text-slate-200 leading-relaxed">Escribe aquí tu texto…</p>';
+            sec.appendChild(note);
+            return note;
+        }
+
+        function createNote() {
+            const sec = $('.dept-section:not(.hidden)');
+            if (!sec) { toast('Abre un departamento antes de añadir texto.', true); return; }
+            const dept = sec.id.replace('dept-', '');
+            const id = 'note-' + Date.now();
+            const note = addNote(dept, id, '<p class="text-sm text-slate-200 leading-relaxed">Escribe aquí tu texto…</p>');
+            if (!note) return;
+            state.notes.push({ dept: dept, id: id, html: note.innerHTML, className: note.className });
+            persist(false);
+            const p = note.querySelector('p');
+            if (p) {
+                p.setAttribute('contenteditable', 'true');
+                p.setAttribute('spellcheck', 'false');
+                p.focus();
+                const range = document.createRange();
+                range.selectNodeContents(p);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+            toast('Bloque de texto añadido. Escribe y haz clic fuera para guardarlo.');
+        }
+
+        // ---------------------------------------------------------------------
+        // Exportar HTML con los cambios incorporados
+        // ---------------------------------------------------------------------
+        function dataBlock() {
+            const D = window.SITE_DATA;
+            return '/* ===== DATA_START ===== */\n' +
+                'const timelineData = ' + JSON.stringify(D.timelineData, null, 2) + ';\n' +
+                'const minasData = ' + JSON.stringify(D.minasData, null, 2) + ';\n' +
+                'const hechosData = ' + JSON.stringify(D.hechosData, null, 2) + ';\n' +
+                'const actoresPrincipalesData = ' + JSON.stringify(D.actoresPrincipalesData, null, 2) + ';\n' +
+                'const clanesData = ' + JSON.stringify(D.clanesData, null, 2) + ';\n' +
+                'const esmeralderosData = ' + JSON.stringify(D.esmeralderosData, null, 2) + ';\n' +
+                'const narcosData = ' + JSON.stringify(D.narcosData, null, 2) + ';\n' +
+                '/* ===== DATA_END ===== */';
+        }
+
+        function exportHTML() {
+            saveAllEditable();
+            const clone = document.documentElement.cloneNode(true);
+            clone.classList.remove('editing');
+            clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+            const toggle = clone.querySelector('#ed-toggle span');
+            if (toggle) toggle.textContent = 'Editar';
+            clone.querySelectorAll('#ed-toast').forEach(el => {
+                el.classList.remove('show', 'ed-error');
+                el.textContent = '';
+            });
+
+            const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+            const startMark = '/* ===== DATA_START ===== */';
+            const endMark = '/* ===== DATA_END ===== */';
+            const start = html.indexOf(startMark);
+            const end = html.indexOf(endMark);
+            if (start === -1 || end === -1) {
+                toast('No se pudo exportar: faltan los marcadores de datos.', true);
+                return;
+            }
+            const out = html.slice(0, start) + dataBlock() + html.slice(end + endMark.length);
+            const blob = new Blob([out], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 4000);
+            toast('HTML exportado. Súbelo a GitHub para publicar los cambios.');
+        }
+
+        // ---------------------------------------------------------------------
+        // Eventos
+        // ---------------------------------------------------------------------
+        function setupEvents() {
+            const fab = $('#ed-fab');
+            if (fab) {
+                fab.addEventListener('click', () => {
+                    const tb = $('#ed-toolbar');
+                    if (tb) tb.classList.toggle('open');
+                });
+            }
+
+            const toggleBtn = $('#ed-toggle');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    editMode = !editMode;
+                    document.body.classList.toggle('editing', editMode);
+                    const span = toggleBtn.querySelector('span');
+                    if (span) span.textContent = editMode ? 'Salir de edición' : 'Editar';
+                    setEditable(editMode);
+                    if (editMode) {
+                        toast('Modo edición: haz clic en un texto para cambiarlo; en las fotos para subirlas; arrastra una foto para mover el encuadre.');
+                    }
+                });
+            }
+
+            const saveBtn = $('#ed-save');
+            if (saveBtn) saveBtn.addEventListener('click', () => { saveAllEditable(); persist(true); });
+
+            const exportBtn = $('#ed-export');
+            if (exportBtn) exportBtn.addEventListener('click', exportHTML);
+
+            const resetBtn = $('#ed-reset');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    if (!confirm('¿Borrar todos los cambios guardados en este navegador y volver a la versión original?')) return;
+                    localStorage.removeItem(STORAGE_KEY);
+                    location.reload();
+                });
+            }
+
+            const addBtn = $('#ed-add-text');
+            if (addBtn) addBtn.addEventListener('click', createNote);
+
+            const fileInput = $('#ed-file');
+            if (fileInput) {
+                fileInput.addEventListener('change', async () => {
+                    const file = fileInput.files && fileInput.files[0];
+                    if (!file || !pendingSlot) return;
+                    const slot = pendingSlot;
+                    pendingSlot = null;
+                    try {
+                        const dataUrl = await resizeImage(file, 800, 0.8);
+                        const obj = getSlotData(slot);
+                        if (!obj) { toast('No se encontró el espacio de imagen.', true); return; }
+                        obj.foto = dataUrl;
+                        obj.fotoPos = obj.fotoPos || '50% 50%';
+                        applySlotVisual(slot, obj);
+                        if (slot.indexOf('actor:') === 0) {
+                            const key = slot.split(':')[1];
+                            if (key === currentActorKey()) drawActorGraph(key);
+                        }
+                        persist(false);
+                        toast('Foto cargada. Arrástrala para ajustar el encuadre.');
+                    } catch (err) {
+                        toast(err.message || 'No se pudo cargar la imagen.', true);
+                    }
+                });
+            }
+
+            document.addEventListener('focusout', (e) => {
+                const el = e.target.closest && e.target.closest('[data-edit],[data-static]');
+                if (el) { saveElement(el, false); return; }
+                const p = e.target.closest && e.target.closest('.ed-note p');
+                if (p) { saveNote(p); persist(false); }
+            });
+
+            document.addEventListener('pointerdown', (e) => {
+                if (!editMode) return;
+                const slot = e.target.closest && e.target.closest('[data-img-slot]');
+                if (!slot) return;
+                const obj = getSlotData(slot.dataset.imgSlot);
+                if (!obj || !obj.foto) return;
+                const rect = slot.getBoundingClientRect();
+                const pos = parsePos(obj.fotoPos);
+                drag = {
+                    slot: slot,
+                    obj: obj,
+                    startX: e.clientX,
+                    startY: e.clientY,
+                    rect: rect,
+                    x: pos[0],
+                    y: pos[1],
+                    lastX: pos[0],
+                    lastY: pos[1],
+                    moved: false
+                };
+                if (slot.setPointerCapture) {
+                    try { slot.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+                }
+                e.preventDefault();
+            });
+
+            document.addEventListener('pointermove', (e) => {
+                if (!drag) return;
+                const dx = e.clientX - drag.startX;
+                const dy = e.clientY - drag.startY;
+                if (Math.abs(dx) + Math.abs(dy) > 4) drag.moved = true;
+                drag.lastX = clamp(drag.x - (dx / drag.rect.width) * 100, 0, 100);
+                drag.lastY = clamp(drag.y - (dy / drag.rect.height) * 100, 0, 100);
+                drag.slot.style.backgroundPosition = drag.lastX + '% ' + drag.lastY + '%';
+            });
+
+            document.addEventListener('pointerup', () => {
+                if (!drag) return;
+                const d = drag;
+                drag = null;
+                if (d.moved) {
+                    d.obj.fotoPos = d.lastX + '% ' + d.lastY + '%';
+                    persist(false);
+                    toast('Encuadre guardado.');
+                    d.slot.addEventListener('click', ev => ev.stopPropagation(), { once: true });
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                const addBtn = e.target.closest && e.target.closest('#ed-add-rel');
+                if (addBtn) {
+                    const key = currentActorKey();
+                    const actor = key && window.SITE_DATA.actoresPrincipalesData[key];
+                    if (!actor) return;
+                    actor.relaciones = actor.relaciones || [];
+                    actor.relaciones.push({ tipo: 'Nueva relación', nombre: 'Nuevo actor' });
+                    persist(false);
+                    window.selectActor(key);
+                    toast('Conexión añadida. Edita el tipo, el nombre y súbele una foto si quieres.');
+                    return;
+                }
+
+                const delBtn = e.target.closest && e.target.closest('.ed-del-rel');
+                if (delBtn) {
+                    const key = currentActorKey();
+                    const actor = key && window.SITE_DATA.actoresPrincipalesData[key];
+                    const idx = +delBtn.getAttribute('data-del-rel');
+                    if (!actor || !actor.relaciones || !actor.relaciones[idx]) return;
+                    if (!confirm('¿Eliminar esta conexión de la red?')) return;
+                    actor.relaciones.splice(idx, 1);
+                    persist(false);
+                    window.selectActor(key);
+                    toast('Conexión eliminada de la red.');
+                    return;
+                }
+
+                if (!editMode) return;
+                const slot = e.target.closest && e.target.closest('[data-img-slot]');
+                if (!slot) return;
+                const obj = getSlotData(slot.dataset.imgSlot);
+                if (obj && !obj.foto) openPicker(slot.dataset.imgSlot);
+            });
+
+            document.addEventListener('dblclick', (e) => {
+                if (!editMode) return;
+                const slot = e.target.closest && e.target.closest('[data-img-slot]');
+                if (slot) openPicker(slot.dataset.imgSlot);
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && String(e.key).toLowerCase() === 's') {
+                    e.preventDefault();
+                    saveAllEditable();
+                    persist(true);
+                }
+                if (e.key === 'Escape' && editMode) {
+                    editMode = false;
+                    document.body.classList.remove('editing');
+                    if (toggleBtn) {
+                        const span = toggleBtn.querySelector('span');
+                        if (span) span.textContent = 'Editar';
+                    }
+                    setEditable(false);
+                }
+            });
+        }
+
+        // ---------------------------------------------------------------------
+        // Inicio
+        // ---------------------------------------------------------------------
+        window.addEventListener('DOMContentLoaded', () => {
+            // El render del sitio ya ocurrió: registramos textos fijos y restauramos notas.
+            registerStatic();
+            applyStaticEdits();
+            state.notes.forEach(n => addNote(n.dept, n.id, n.html, n.className));
+            $$('[data-img-slot]').forEach(el => {
+                const r = el.getBoundingClientRect();
+                if (r.width < 90 || r.height < 90) el.classList.add('ed-img-small');
+            });
+            setupEvents();
+            const key = currentActorKey();
+            if (key) drawActorGraph(key);
+            if (window.lucide) lucide.createIcons();
+            setTimeout(() => toast('Toca el lápiz de abajo a la derecha para editar textos, subir fotos y ajustar el encuadre.'), 900);
+        });
+    })();
     </script>
 </body>
 </html>
